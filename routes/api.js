@@ -51,6 +51,8 @@ router.post("/insert", (req, res) => {
 		to: process.env.email_target,
 	};
 
+	console.log(`IS MAIL SENT: ${isMailSent}`);
+
 	if (temperatura < 18 && !isMailSent) {
 		mailOptions.text = `Se registró una temperatura de ${temperatura}ºC en el invernadero, por debajo de los 18ºC necesarios.`;
 		mailOptions.subject = "Alerta por límite inferior de temperatura";
@@ -59,6 +61,8 @@ router.post("/insert", (req, res) => {
 			if (error) {
 				console.log(error);
 			} else {
+				console.log(`Correo enviado por limite inferior`);
+
 				isMailSent = true;
 			}
 		});
@@ -70,10 +74,13 @@ router.post("/insert", (req, res) => {
 			if (error) {
 				console.log(error);
 			} else {
+				console.log(`Correo enviado por limite superior`);
+
 				isMailSent = true;
 			}
 		});
 	} else {
+		console.log(`CORRECT TEMP`);
 		isMailSent = false;
 	}
 
