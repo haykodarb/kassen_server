@@ -52,36 +52,39 @@ router.post("/insert", (req, res) => {
 	};
 
 	console.log(`IS MAIL SENT: ${isMailSent}`);
+	if (!isMailSent) {
+		if (temperatura < 18) {
+			mailOptions.text = `Se registró una temperatura de ${temperatura}ºC en el invernadero, por debajo de los 18ºC necesarios.`;
+			mailOptions.subject = "Alerta por límite inferior de temperatura";
 
-	if (temperatura < 18 && !isMailSent) {
-		mailOptions.text = `Se registró una temperatura de ${temperatura}ºC en el invernadero, por debajo de los 18ºC necesarios.`;
-		mailOptions.subject = "Alerta por límite inferior de temperatura";
+			transporter.sendMail(mailOptions, (error, info) => {
+				if (error) {
+					console.log(error);
+				} else {
+					console.log(`Correo enviado por limite inferior`);
 
-		transporter.sendMail(mailOptions, (error, info) => {
-			if (error) {
-				console.log(error);
-			} else {
-				console.log(`Correo enviado por limite inferior`);
+					isMailSent = true;
+				}
+			});
+		} else if (temperatura > 22) {
+			mailOptions.text = `Se registró una temperatura de ${temperatura}ºC en el invernadero, por encima de los 22ºC máximos.`;
+			mailOptions.subject = "Alerta por límite superior de temperatura";
 
-				isMailSent = true;
-			}
-		});
-	} else if (temperatura > 22 && !isMailSent) {
-		mailOptions.text = `Se registró una temperatura de ${temperatura}ºC en el invernadero, por encima de los 22ºC máximos.`;
-		mailOptions.subject = "Alerta por límite superior de temperatura";
+			transporter.sendMail(mailOptions, (error, info) => {
+				if (error) {
+					console.log(error);
+				} else {
+					console.log(`Correo enviado por limite superior`);
 
-		transporter.sendMail(mailOptions, (error, info) => {
-			if (error) {
-				console.log(error);
-			} else {
-				console.log(`Correo enviado por limite superior`);
-
-				isMailSent = true;
-			}
-		});
+					isMailSent = true;
+				}
+			});
+		}
 	} else {
-		console.log(`CORRECT TEMP`);
-		isMailSent = false;
+		if (temperatura >= 18 && temperatura <= 22) {
+			console.log(`CORRECT TEMP, RESTARTING EMAIL FLAG`);
+			isMailSent = false;
+		}
 	}
 
 	let sql = `INSERT INTO datos (id, tiempo, serie, temp, hum, lum) `;
