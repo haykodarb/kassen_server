@@ -11,7 +11,7 @@ let port = process.env.PORT || 3000;
 
 //Server config
 http.listen(port, () => {
-  console.log(chalk.green(`Listening on port: ${port}`));
+	console.log(chalk.green(`Listening on port: ${port}`));
 });
 
 //Routes
@@ -34,9 +34,9 @@ app.set("views", "./public/views");
 app.set("view engine", "ejs");
 
 app.get("/", verify, (req, res) => {
-  res.redirect("./dashboard");
+	res.redirect("./dashboard");
 });
 
 app.get("/ping", (req, res) => {
-  res.status(200).send("PING");
+	res.status(200).send("PING");
 });
