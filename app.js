@@ -1,5 +1,5 @@
 //Modules
-const dotenv = require("dotenv").config();
+require("dotenv").config();
 const express = require("express");
 const app = express();
 const ejs = require("ejs");
@@ -7,7 +7,7 @@ const cors = require("cors");
 const chalk = require("chalk");
 const http = require("http").createServer(app);
 
-let port = process.env.PORT || 3000;
+let port = process.env.SERVER_PORT || 3000;
 
 //Server config
 http.listen(port, () => {

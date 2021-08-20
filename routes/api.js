@@ -10,8 +10,8 @@ let transporter = nodemailer.createTransport({
 	secure: false,
 	requireTLS: true,
 	auth: {
-		user: process.env.gmail_user,
-		pass: process.env.gmail_pass,
+		user: process.env.GMAIL_USER,
+		pass: process.env.GMAIL_PASS,
 	},
 });
 
@@ -35,10 +35,10 @@ function obtenerDia(num) {
 
 let con = mysql.createPool({
 	connectionLimit: 4,
-	host: process.env.host,
-	user: process.env.user,
-	password: process.env.password,
-	database: process.env.database,
+	host: process.env.MYSQL_DB_HOST,
+	user: process.env.MYSQL_DB_USER,
+	password: process.env.MYSQL_DB_PASS,
+	database: process.env.MYSQL_DB_NAME,
 });
 
 router.post("/insert", (req, res) => {
@@ -47,8 +47,8 @@ router.post("/insert", (req, res) => {
 	const temperatura = data.temp;
 
 	let mailOptions = {
-		from: process.env.gmail_user,
-		to: process.env.email_target,
+		from: process.env.GMAIL_USER,
+		to: process.env.TARGET_EMAIL,
 	};
 
 	console.log(`IS MAIL SENT: ${isMailSent}`);
