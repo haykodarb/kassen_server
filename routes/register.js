@@ -66,7 +66,7 @@ router.post("/", (req, res) => {
 		con.query(sqlVerify, (err, result) => {
 			if (err) {
 				return res.render("register", {
-					err: `Error con la conexión a la base de datos: ${e}`,
+					err: `Error con la conexión a la base de datos: ${err}`,
 				});
 			} else {
 				if (result[0]) {
@@ -76,12 +76,12 @@ router.post("/", (req, res) => {
 					});
 				} else {
 					let serie = randomize(8);
-					let sqlCreate = `INSERT INTO users (id, date, serie, username, email, password) `;
-					sqlCreate += `VALUES (NULL, '${user.date}', '${serie}', '${user.username}', '${user.email}', '${user.password}')`;
+					let sqlCreate = `INSERT INTO users (id, serie, username, email, password) `;
+					sqlCreate += `VALUES (NULL, '${serie}', '${user.username}', '${user.email}', '${user.password}')`;
 					con.query(sqlCreate, (err) => {
 						if (err) {
 							res.render("register", {
-								err: `Error con la conexión a la base de datos: ${e}`,
+								err: `Error con la conexión a la base de datos: ${err}`,
 							});
 						} else {
 							res.render("register", {

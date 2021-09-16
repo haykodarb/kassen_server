@@ -7,19 +7,19 @@ const router = express.Router();
 router.use(cookieParser());
 
 module.exports = function verify(req, res, next) {
-  if (typeof req.cookies === "undefined") {
-    return res.redirect("./login");
-  } else {
-    const token = req.cookies.token;
-    jwt.verify(token, process.env.token_secret, function (
-      err,
-      decoded
-    ) {
-      if (typeof decoded === 'undefined') {
-        res.redirect("./login");        
-      } else {
-        next();
-      }
-    });
-  }
+	if (typeof req.cookies === "undefined") {
+		return res.redirect("./login");
+	} else {
+		const token = req.cookies.token;
+		jwt.verify(token, process.env.TOKEN_SECRET, function (err, decoded) {
+			console.log(err);
+			console.log(decoded);
+
+			if (typeof decoded === "undefined") {
+				res.redirect("./login");
+			} else {
+				next();
+			}
+		});
+	}
 };

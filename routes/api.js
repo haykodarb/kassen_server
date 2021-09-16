@@ -1,21 +1,6 @@
 const express = require("express");
 const mysql = require("mysql");
 const moment = require("moment-timezone");
-const nodemailer = require("nodemailer");
-
-let transporter = nodemailer.createTransport({
-	service: "gmail",
-	host: "smtp.gmail.com",
-	port: 587,
-	secure: false,
-	requireTLS: true,
-	auth: {
-		user: process.env.GMAIL_USER,
-		pass: process.env.GMAIL_PASS,
-	},
-});
-
-let isMailSent = false;
 
 const router = express.Router();
 router.use(express.json());
@@ -44,48 +29,6 @@ let con = mysql.createPool({
 router.post("/insert", (req, res) => {
 	let tiempoActual = obtenerAhora();
 	const data = req.body;
-	const temperatura = data.temp;
-
-	let mailOptions = {
-		from: process.env.GMAIL_USER,
-		to: process.env.TARGET_EMAIL,
-	};
-
-	console.log(`IS MAIL SENT: ${isMailSent}`);
-	if (!isMailSent) {
-		if (temperatura < 18) {
-			mailOptions.text = `Se registró una temperatura de ${temperatura}ºC en el invernadero, por debajo de los 18ºC necesarios.`;
-			mailOptions.subject = "Alerta por límite inferior de temperatura";
-
-			transporter.sendMail(mailOptions, (error, info) => {
-				if (error) {
-					console.log(error);
-				} else {
-					console.log(`Correo enviado por limite inferior`);
-
-					isMailSent = true;
-				}
-			});
-		} else if (temperatura > 22) {
-			mailOptions.text = `Se registró una temperatura de ${temperatura}ºC en el invernadero, por encima de los 22ºC máximos.`;
-			mailOptions.subject = "Alerta por límite superior de temperatura";
-
-			transporter.sendMail(mailOptions, (error, info) => {
-				if (error) {
-					console.log(error);
-				} else {
-					console.log(`Correo enviado por limite superior`);
-
-					isMailSent = true;
-				}
-			});
-		}
-	} else {
-		if (temperatura >= 18 && temperatura <= 22) {
-			console.log(`CORRECT TEMP, RESTARTING EMAIL FLAG`);
-			isMailSent = false;
-		}
-	}
 
 	let sql = `INSERT INTO datos (id, tiempo, serie, temp, hum, lum) `;
 	sql += `VALUES (NULL, '${tiempoActual}', '${data.serie}', ${data.temp}, ${data.hum}, ${data.lum})`;

@@ -7,7 +7,7 @@ const cors = require("cors");
 const chalk = require("chalk");
 const http = require("http").createServer(app);
 
-let port = process.env.SERVER_PORT || 3000;
+let port = process.env.SERVER_PORT;
 
 //Server config
 http.listen(port, () => {
