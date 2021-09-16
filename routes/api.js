@@ -6,15 +6,12 @@ const router = express.Router();
 router.use(express.json());
 
 function obtenerAhora() {
-	let now = moment().tz("America/Argentina/Buenos_Aires").format();
+	let now = moment().subtract(3, "hours").format();
 	return now;
 }
 
 function obtenerDia(num) {
-	let now = moment()
-		.tz("America/Argentina/Buenos_Aires")
-		.subtract(num, "days")
-		.format();
+	let now = moment().subtract(num, "days").subtract(3, "hours").format();
 	return now;
 }
 
