@@ -8,7 +8,7 @@ const PORT = process.env.KASSEN_PORT;
 const db: Database = new sqlite3("./database.db");
 
 const storage = multer.diskStorage({
-	destination: "./uploads",
+	destination: "./images",
 	filename: (_, file, cb) => {
 		const uniqueName =
 			Date.now() + "-" + Math.round(Math.random() * 1e9) + path.extname(file.originalname);
@@ -55,7 +55,7 @@ app.post('/temp', (req: Request, res: Response) => {
 		}
 
 		const temperature = req.body.temperature;
-		const timestamp = new Date().toISOString();
+		const timestamp = new Date.now();
 
 		// Send success response
 		res.status(200).json({
@@ -101,7 +101,7 @@ app.get("/images", (req, res) => {
 	}
 });
 
-app.use(express.static('uploads'));
+app.use('/images',express.static('images'));
 
 // Start the server
 app.listen(PORT, () => {
