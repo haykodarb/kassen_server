@@ -3,7 +3,7 @@ import sqlite3, { Database } from 'better-sqlite3';
 import multer from "multer";
 import path from 'path';
 
-const PORT = 3000;
+const PORT = process.env.KASSEN_PORT;
 
 const db: Database = new sqlite3("./database.db");
 
@@ -100,6 +100,8 @@ app.get("/images", (req, res) => {
 		res.status(500).json({ error: "Failed to fetch images" });
 	}
 });
+
+app.use(express.static('uploads'));
 
 // Start the server
 app.listen(PORT, () => {
